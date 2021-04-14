@@ -23,7 +23,7 @@ function DV_hop()
         disp('The network is not connected...the connected subgraph needs to be divided...this situation is not considered here ');
         return;
     end
-    %~~~~~~~~~~~~~~~~~~~~~~~~~Seek the correction value of each beacon node~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    %~~~~~~~~~~~~~~~~~~~~~~~~~Seek the correction value of each anchor node~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     anchor_to_anchor=shortest_path(1:all_nodes.anchors_n,1:all_nodes.anchors_n);
     for i=1:all_nodes.anchors_n
         hopsize(i)=sum(sqrt(sum(transpose((repmat(all_nodes.true(i,:),all_nodes.anchors_n,1)-all_nodes.true(1:all_nodes.anchors_n,:)).^2))))/sum(anchor_to_anchor(i,:));

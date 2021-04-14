@@ -8,10 +8,10 @@ close all;
 % ~~~~~~~~~~~~~~~~~~~~~~ Arrange nodes and draw node distribution diagrams~~~~~~~~~~~~ ~~~~~~~~~~~
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
 cd 'Deploy Nodes'
-square_random(1000,200,0.08);%GPS error of the layout node is 0
+square_random(1000,100,0.1);%GPS error of the layout node is 0
 %square_random(1000,300,0.2,30) %GPS error is 30m
 %C_random([1000,300,300,700],240,0.2);
-%square_regular(1000,100,0.1,0.2);
+%square_regular(1000,100,0.1,0.1);
 %C_regular([1000,300,300,700],100,0.1,0.2);
 Distribution_Of_WSN;%draw node distribution diagram
 cd ..;
@@ -38,6 +38,8 @@ end
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Topology_Of_WSN;% Draw neighbor relationship diagram
 cd ..;
+load 'Deploy Nodes/coordinates.mat';
+original_all_nodes = all_nodes;
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~select positioning algorithm~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,7 +48,9 @@ cd ..;
 %cd 'Grid Scan';Grid_Scan(0.1*comm_r);%Grid_scan_second(...
 %cd RSSI;RSSI;%RSSI_second;%RSSI_third;
 %~~~~~~~~~~~~~~~~~~~~~~~~
-cd 'DV-hop';DV_hop;
+%cd 'DV-hop';DV_hop;
+algorithm = 'DV-hop';
+cd(algorithm);DV_hop;
 cd ..
 %cd Amorphous;Amorphous;
 %cd APIT;APIT(0.1*comm_r);
@@ -56,6 +60,20 @@ cd ..
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~ Calculate positioning error, draw positioning error map~~~~~~~~~~~~~~~~~~~~~~~
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 cd 'Localization Error'
-calculate_localization_error;
+calculate_localization_error(algorithm);
+cd ..;
+
+all_nodes = original_all_nodes;
+save 'Deploy Nodes/coordinates.mat' all_nodes;
+algorithm = 'Proposed Algorithm';
+cd(algorithm);Proposed_algorithm;
+cd ..
+dist_available=true;cd 'MDS-MAP';MDS_MAP(dist_available);
+cd ..
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~ Calculate positioning error, draw positioning error map~~~~~~~~~~~~~~~~~~~~~~~
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cd 'Localization Error'
+calculate_localization_error(algorithm);
 cd ..;
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

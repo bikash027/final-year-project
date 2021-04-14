@@ -1,4 +1,4 @@
-function [Localization_error,Unresolve_num]=calculate_localization_error()
+function [Localization_error,Unresolve_num]=calculate_localization_error(algorithm)
 % Draw the positioning result diagram of the positioning algorithm
 % There is no positioning error for the anchor node, which is indicated by red *,
 % Unknown nodes can be located (blue O indicates the estimated position of these nodes, blue-indicates the error from the estimated position of these nodes to the true position)
@@ -19,7 +19,7 @@ function [Localization_error,Unresolve_num]=calculate_localization_error()
     plot(transpose([all_nodes.estimated(resolved_unknown_nodes_index,1),all_nodes.true(resolved_unknown_nodes_index,1)]),...
         transpose([all_nodes.estimated(resolved_unknown_nodes_index,2),all_nodes.true(resolved_unknown_nodes_index,2)]),'b-');
     axis auto;
-    title('positioning error map');    
+    title(['positioning error map: ', algorithm]);    
     try % draw a regularly distributed grid line
         x=0:all_nodes.grid_L:all_nodes.square_L;
         set(gca,'XTick',x);
@@ -40,5 +40,5 @@ function [Localization_error,Unresolve_num]=calculate_localization_error()
         num2str(all_nodes.nodes_n-all_nodes.anchors_n),'Unknown nodes,',num2str(Unresolved_num),' Unresolved nodes that cannot be located']);
     Localization_error=sum(sqrt(sum(transpose((all_nodes.estimated(resolved_unknown_nodes_index,:)-all_nodes.true(resolved_unknown_nodes_index,:)).^2))))/...
         (length(resolved_unknown_nodes_index)*comm_r);
-    disp(['The positioning error is ',num2str(Localization_error)]);
+    disp(['The positioning error for ',algorithm,' is ',num2str(Localization_error)]);
 end
